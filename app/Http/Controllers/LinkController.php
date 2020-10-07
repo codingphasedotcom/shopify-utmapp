@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Link;
 use Illuminate\Http\Request;
+use Auth;
 
 class LinkController extends Controller
 {
@@ -14,7 +15,10 @@ class LinkController extends Controller
      */
     public function index()
     {
-        //
+        $links = Link::all();
+        $user = Auth::user();
+        $user->links();
+        return $user->links()->get();
     }
 
     /**

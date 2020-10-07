@@ -1,12 +1,26 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {TitleBar, useRoutePropagation} from '@shopify/app-bridge-react';
 import {useLocation} from 'react-router-dom';
+import axios from 'axios';
 
 export default function ShowAllLinks(){
     let location = useLocation();
     console.log(location)
+    const [linksData, setLinksData] = useState([]);
 
     useRoutePropagation(location);
+    useEffect(() => {
+        axios.get('/api/links')
+        .then(function (response) {
+            setLinksData(response.data)
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }, []);
+
+    
     return(<>
         <TitleBar title="Show All Links" />
         <div className="app-page-title">
@@ -88,20 +102,27 @@ export default function ShowAllLinks(){
                             </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Adidas Backpack</td>
-                                    <td><div className="mb-2 mr-2 badge badge-primary">Product</div></td>
-                                    <td>50JULY42020</td>
-                                    <td>
-                                        <button className="mb-2 mr-2 btn btn-success">
-                                            <i className="pe-7s-pen"> </i> Edit
-                                        </button>
-                                        <button className="mb-2 mr-2 btn btn-danger">
-                                        <i className="pe-7s-trash"> </i> Delete
-                                        </button>
-                                    </td>
-                                </tr>
+                                {
+                                    linksData.map((item) => {
+                                        return(
+                                            <tr key={item.id}>
+                                                <th scope="row">{item.id}</th>
+                                                <td>{item.original_content_title}</td>
+                                                <td><div className={`mb-2 mr-2 badge ${item.link_type == 'custom' ? 'badge-warning' : 'badge-primary'}`}>{item.link_type}</div></td>
+                                                <td>{item.discount_code}</td>
+                                                <td>
+                                                    <a href={`/app/links/${item.id}`} className="mb-2 mr-2 btn btn-success">
+                                                        <i className="pe-7s-pen"> </i> Edit
+                                                    </a>
+                                                    <a href={`/app/links/${item.id}/delete`} className="mb-2 mr-2 btn btn-danger">
+                                                    <i className="pe-7s-trash"> </i> Delete
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                                
                             
                             </tbody>
                         </table>
