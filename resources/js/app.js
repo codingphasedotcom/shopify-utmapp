@@ -19,6 +19,7 @@ import CreateNewCollectionLink from './pages/links/collections/CreateNewCollecti
 import CreateNewCustomLink from './pages/links/custom/CreateNewCustomLink';
 import ShowAllLinks from './pages/links/ShowAllLinks';
 import EditCollectionLink from './pages/links/collections/EditCollectionLink';
+import EditCustomLink from './pages/links/custom/EditCustomLink';
 
 export default class App extends Component{
 
@@ -49,6 +50,9 @@ export default class App extends Component{
                                 </Route>
                                 <Route path="/app/links/custom/new">
                                     <CreateNewCustomLink />
+                                </Route>
+                                <Route path="/app/links/custom/:id/edit">
+                                    <EditCustomLink />
                                 </Route>
                                 <Route path="/app/links/products/:id/edit">
                                     <EditProductLink />
