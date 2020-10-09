@@ -13,10 +13,12 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import CreateNewProductLink from './pages/links/CreateNewProductLink';
-import CreateNewCollectionLink from './pages/links/CreateNewCollectionLink';
-import CreateNewCustomLink from './pages/links/CreateNewCustomLink';
+import CreateNewProductLink from './pages/links/products/CreateNewProductLink';
+import EditProductLink from './pages/links/products/EditProductLink';
+import CreateNewCollectionLink from './pages/links/collections/CreateNewCollectionLink';
+import CreateNewCustomLink from './pages/links/custom/CreateNewCustomLink';
 import ShowAllLinks from './pages/links/ShowAllLinks';
+import EditCollectionLink from './pages/links/collections/EditCollectionLink';
 
 export default class App extends Component{
 
@@ -42,8 +44,14 @@ export default class App extends Component{
                                 <Route path="/app/links/collection/new">
                                     <CreateNewCollectionLink />
                                 </Route>
+                                <Route path="/app/links/collections/:id/edit">
+                                    <EditCollectionLink />
+                                </Route>
                                 <Route path="/app/links/custom/new">
                                     <CreateNewCustomLink />
+                                </Route>
+                                <Route path="/app/links/products/:id/edit">
+                                    <EditProductLink />
                                 </Route>
                                 <Route path="/app/links/all">
                                     <ShowAllLinks />

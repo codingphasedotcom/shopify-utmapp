@@ -20,6 +20,21 @@ export default function ShowAllLinks(){
         });
     }, []);
 
+    function deleteLink(id){
+        axios.delete(`/api/links/${id}`)
+        .then(function (response) {
+            if(response.data == "Link Deleted") {
+                let newData = linksData.filter((item) => item.id != id );
+                setLinksData(newData);
+            }
+            
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+
     
     return(<>
         <TitleBar title="Show All Links" />
@@ -104,6 +119,17 @@ export default function ShowAllLinks(){
                             <tbody>
                                 {
                                     linksData.map((item) => {
+                                        let directory = '';
+                                        switch(item.link_type){
+                                            case 'product':
+                                                directory = 'products';
+                                            break;
+                                            case 'collection':
+                                                directory = 'collections';
+                                                break;
+                                            default:
+                                                directory = 'custom' 
+                                        }
                                         return(
                                             <tr key={item.id}>
                                                 <th scope="row">{item.id}</th>
@@ -111,12 +137,12 @@ export default function ShowAllLinks(){
                                                 <td><div className={`mb-2 mr-2 badge ${item.link_type == 'custom' ? 'badge-warning' : 'badge-primary'}`}>{item.link_type}</div></td>
                                                 <td>{item.discount_code}</td>
                                                 <td>
-                                                    <a href={`/app/links/${item.id}`} className="mb-2 mr-2 btn btn-success">
+                                                    <a href={`/app/links/${directory}/${item.id}/edit`} className="mb-2 mr-2 btn btn-success">
                                                         <i className="pe-7s-pen"> </i> Edit
                                                     </a>
-                                                    <a href={`/app/links/${item.id}/delete`} className="mb-2 mr-2 btn btn-danger">
+                                                    <button onClick={() => deleteLink(item.id)} className="mb-2 mr-2 btn btn-danger">
                                                     <i className="pe-7s-trash"> </i> Delete
-                                                    </a>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         )
