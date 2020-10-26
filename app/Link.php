@@ -10,4 +10,8 @@ class Link extends Model
     {
         return $this->belongsTo('App\User');
     }
+    public function shortlink()
+    {
+        return $this->hasOne('App\Models\Shortlink');
+    }
 }

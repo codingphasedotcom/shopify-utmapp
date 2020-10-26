@@ -23,6 +23,7 @@ Route::get('/app', function () {
 })->middleware(['auth.shopify'])->name('home');
 
 Route::get('/{slug}', 'ShortlinkController@index');
+
 Route::post('/app/graphql', [
     'uses' => 'DashboardController@graphql',
     'as' => 'qraphqlapi']);

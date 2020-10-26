@@ -80,7 +80,8 @@ export default function CreateNewLink(props){
         console.log(formText)
     }
     function clickedSaveBtn(){
-        console.log(collectionData);
+        
+        
         axios.post('/api/createlink', {
             campaign_source: formText.campaignSource,
             campaign_medium: formText.campaignMedium,

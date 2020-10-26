@@ -12,9 +12,10 @@ class ShortlinkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($slug)
     {
-        //
+        $shortlink = Shortlink::firstWhere('slug', $slug);
+        return redirect($shortlink->link->link_url);
     }
 
     /**
