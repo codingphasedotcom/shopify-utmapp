@@ -10,6 +10,8 @@ export default function EditProductLink(props){
     const history = useHistory();
     const link_id = useParams().id;
 
+    
+
     const [resourcePickerOpen, setResourcePickerOpen] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [showErrorToast, setShowErrorToast] = useState(false);
@@ -25,6 +27,8 @@ export default function EditProductLink(props){
         title: '',
         id: '',
     });
+    const domainUrl = `${formText.productUrl}`.match(/^(?:\/\/|[^\/]+)*/)[0];
+    const slug = `${formText.productUrl}`.match(/[^\/]+$/)[0];
 
     useEffect(() => {
         axios.get(`/api/links/${link_id}`)
@@ -108,7 +112,8 @@ export default function EditProductLink(props){
             original_content_id: formText.id,
             link_type: 'product',
             link_img_url: formText.linkImgUrl,
-            user_id: document.getElementById("userId").value
+            user_id: document.getElementById("userId").value,
+            link_url: `${domainUrl}/discount/${formText.discountCode}?redirect=%2Fproducts%2F${slug}${formText.campaignSource == '' ? '' : `&utm_source=${formText.campaignSource.replace(/ /g, '%20')}`}${formText.campaignMedium == '' ? '' : `&utm_medium=${formText.campaignMedium.replace(/ /g, '%20')}`}${formText.campaignName == '' ? '' : `&utm_campaign=${formText.campaignName.replace(/ /g, '%20')}`}${formText.campaignTerm == '' ? '' : `&utm_term=${formText.campaignTerm.replace(/ /g, '%20')}`}${formText.campaignContent == '' ? '' : `&utm_campaign=${formText.campaignContent.replace(/ /g, '%20')}`}`
           })
           .then(function (response) {
               if(response.data == "Updated Data"){
@@ -175,15 +180,14 @@ export default function EditProductLink(props){
             </div>
         </div>  
         
-        {formText == false ? "" : <Content formText={formText} handleText={handleText} clickedEditProductLink={clickedEditProductLink} />}
+        {formText == false ? "" : <Content formText={formText} handleText={handleText} clickedEditProductLink={clickedEditProductLink} slug={slug} domainUrl={domainUrl} />}
 
         
         
     </>)
 }
 function UrlPreview(props){
-    const domainUrl = `${props.formText.productUrl}`.match(/^(?:\/\/|[^\/]+)*/)[0];
-    const slug = `${props.formText.productUrl}`.match(/[^\/]+$/)[0];
+    
 
     if(props.formText.discountCode == ''){
         return(<>
@@ -194,7 +198,7 @@ function UrlPreview(props){
     } else {
         return(<>
             <div className="position-relative form-group">
-            {`${domainUrl}/discount/${props.formText.discountCode}?redirect=%2Fproducts%2F${slug}${props.formText.campaignSource == '' ? '' : `&utm_source=${props.formText.campaignSource.replace(/ /g, '%20')}`}${props.formText.campaignMedium == '' ? '' : `&utm_medium=${props.formText.campaignMedium.replace(/ /g, '%20')}`}${props.formText.campaignName == '' ? '' : `&utm_campaign=${props.formText.campaignName.replace(/ /g, '%20')}`}${props.formText.campaignTerm == '' ? '' : `&utm_term=${props.formText.campaignTerm.replace(/ /g, '%20')}`}${props.formText.campaignContent == '' ? '' : `&utm_campaign=${props.formText.campaignContent.replace(/ /g, '%20')}`}`}
+            {`${props.domainUrl}/discount/${props.formText.discountCode}?redirect=%2Fproducts%2F${props.slug}${props.formText.campaignSource == '' ? '' : `&utm_source=${props.formText.campaignSource.replace(/ /g, '%20')}`}${props.formText.campaignMedium == '' ? '' : `&utm_medium=${props.formText.campaignMedium.replace(/ /g, '%20')}`}${props.formText.campaignName == '' ? '' : `&utm_campaign=${props.formText.campaignName.replace(/ /g, '%20')}`}${props.formText.campaignTerm == '' ? '' : `&utm_term=${props.formText.campaignTerm.replace(/ /g, '%20')}`}${props.formText.campaignContent == '' ? '' : `&utm_campaign=${props.formText.campaignContent.replace(/ /g, '%20')}`}`}
             </div>
         </>)
     }
@@ -256,7 +260,7 @@ function Content(props) {
                             </div>
                         </div>
                         <h5 className="card-title">Link Preview</h5>
-                        <UrlPreview formText={props.formText} />
+                        <UrlPreview formText={props.formText} slug={props.slug} domainUrl={props.domainUrl}/>
                         
                     </div>
                 </div>

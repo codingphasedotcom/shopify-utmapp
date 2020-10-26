@@ -78,7 +78,8 @@ export default function EditCustomLink(props){
             original_content_title: formText.customTitle,
             original_content_id: formText.id,
             link_type: 'custom',
-            user_id: document.getElementById("userId").value
+            user_id: document.getElementById("userId").value,
+            link_url: `${formText.customUrl}?${formText.campaignSource == '' ? '' : `utm_source=${formText.campaignSource.replace(/ /g, '%20')}`}${formText.campaignMedium == '' ? '' : `&utm_medium=${formText.campaignMedium.replace(/ /g, '%20')}`}${formText.campaignName == '' ? '' : `&utm_campaign=${formText.campaignName.replace(/ /g, '%20')}`}${formText.campaignTerm == '' ? '' : `&utm_term=${formText.campaignTerm.replace(/ /g, '%20')}`}${formText.campaignContent == '' ? '' : `&utm_campaign=${formText.campaignContent.replace(/ /g, '%20')}`}`
           })
           .then(function (response) {
               if(response.data == "Updated Data"){

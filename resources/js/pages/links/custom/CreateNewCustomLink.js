@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TitleBar, useRoutePropagation, ResourcePicker} from '@shopify/app-bridge-react';
+import {TitleBar, useRoutePropagation, ResourcePicker, Toast} from '@shopify/app-bridge-react';
 import {useLocation, useHistory} from 'react-router-dom';
 import axios from 'axios';
 
@@ -10,6 +10,8 @@ export default function CreateNewLink(props){
     const history = useHistory();
 
     const [resourcePickerOpen, setResourcePickerOpen] = useState(true);
+    const [showToast, setShowToast] = useState(false);
+    const [showErrorToast, setShowErrorToast] = useState(false);
     const [customData, setCustomData] = useState(false);
     const [formText, setFormText] = useState({
         customTitle: '',
@@ -54,22 +56,30 @@ export default function CreateNewLink(props){
             original_content_url: formText.customUrl,
             original_content_title: formText.customTitle,
             link_type: 'custom',
-            user_id: document.getElementById("userId").value
+            user_id: document.getElementById("userId").value,
+            link_url: `${formText.customUrl}?${formText.campaignSource == '' ? '' : `utm_source=${formText.campaignSource.replace(/ /g, '%20')}`}${formText.campaignMedium == '' ? '' : `&utm_medium=${formText.campaignMedium.replace(/ /g, '%20')}`}${formText.campaignName == '' ? '' : `&utm_campaign=${formText.campaignName.replace(/ /g, '%20')}`}${formText.campaignTerm == '' ? '' : `&utm_term=${formText.campaignTerm.replace(/ /g, '%20')}`}${formText.campaignContent == '' ? '' : `&utm_campaign=${formText.campaignContent.replace(/ /g, '%20')}`}`
           })
           .then(function (response) {
               if(response.data == "Saved Data"){
-                  alert('Link Saved')
-                  history.push('/app')
+                    setShowToast(true);
+                  history.push('/app/links/all')
               }
             console.log(response);
           })
           .catch(function (error) {
+            setShowErrorToast(true);
+              setShowToast(true);
             console.log(error);
           });
     }
     return(<>
         <TitleBar title="Create New Custom Link" />
-        
+        {showToast ? (
+          <Toast content={`Created Link`} onDismiss={() => {
+            setShowToast(false)
+            setShowErrorToast(false)
+          } } error={showErrorToast} />
+        ) : null}
         <div className={"app-page-title"}>
             <div className="page-title-wrapper">
                 <div className="page-title-heading">

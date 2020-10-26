@@ -20,7 +20,7 @@ class CreateShortlinksTable extends Migration
             $table->string('slug');
             $table->timestamps();
         });
-
+        
         Schema::table('shortlinks', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('link_id')->references('id')->on('links')->onDelete('cascade');

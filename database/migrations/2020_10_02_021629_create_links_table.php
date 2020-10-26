@@ -15,6 +15,8 @@ class CreateLinksTable extends Migration
     {
         Schema::create('links', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('original_content_title');
+            $table->longText('link_url');
             $table->string('campaign_source')->nullable();
             $table->string('campaign_medium')->nullable();
             $table->string('campaign_name')->nullable();
@@ -24,7 +26,6 @@ class CreateLinksTable extends Migration
             $table->longText('original_content_url');
             $table->string('link_type');
             $table->longText('link_img_url')->nullable();
-            $table->string('original_content_title');
             $table->longText('original_content_id')->nullable();
             $table->bigInteger('user_id')->unsigned();
             $table->timestamps();

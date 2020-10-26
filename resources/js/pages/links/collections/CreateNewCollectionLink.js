@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TitleBar, useRoutePropagation, ResourcePicker} from '@shopify/app-bridge-react';
+import {TitleBar, useRoutePropagation, ResourcePicker, Toast} from '@shopify/app-bridge-react';
 import {useLocation, useHistory} from 'react-router-dom';
 import axios from 'axios';
 
@@ -10,6 +10,8 @@ export default function CreateNewLink(props){
     const history = useHistory();
 
     const [resourcePickerOpen, setResourcePickerOpen] = useState(true);
+    const [showToast, setShowToast] = useState(false);
+    const [showErrorToast, setShowErrorToast] = useState(false);
     const [collectionData, setCollectionData] = useState(false);
     const [formText, setFormText] = useState({
         discountCode: '',
@@ -17,8 +19,11 @@ export default function CreateNewLink(props){
         campaignMedium: '',
         campaignName: '',
         campaignTerm: '',
-        campaignContent: ''
+        campaignContent: '',
+        collectionUrl: ''
     });
+    const domainUrl = `${collectionData.collectionUrl}`.match(/^(?:\/\/|[^\/]+)*/)[0];
+    const slug = `${collectionData.collectionUrl}`.match(/[^\/]+$/)[0];
 
     const slugify = text => 
     text
@@ -88,21 +93,30 @@ export default function CreateNewLink(props){
             original_content_id: collectionData.id,
             link_type: 'collection',
             link_img_url: collectionData.image.originalSrc,
-            user_id: document.getElementById("userId").value
+            user_id: document.getElementById("userId").value,
+            link_url: `${domainUrl}/discount/${formText.discountCode}?redirect=%2Fcollections%2F${slug}${formText.campaignSource == '' ? '' : `&utm_source=${formText.campaignSource.replace(/ /g, '%20')}`}${formText.campaignMedium == '' ? '' : `&utm_medium=${formText.campaignMedium.replace(/ /g, '%20')}`}${formText.campaignName == '' ? '' : `&utm_campaign=${formText.campaignName.replace(/ /g, '%20')}`}${formText.campaignTerm == '' ? '' : `&utm_term=${formText.campaignTerm.replace(/ /g, '%20')}`}${formText.campaignContent == '' ? '' : `&utm_campaign=${formText.campaignContent.replace(/ /g, '%20')}`}`
           })
           .then(function (response) {
               if(response.data == "Saved Data"){
-                  alert('Link Saved')
-                  history.push('/app')
+                    setShowToast(true);
+                  history.push('/app/links/all')
               }
             console.log(response);
           })
           .catch(function (error) {
+            setShowErrorToast(true);
+            setShowToast(true);
             console.log(error);
           });
     }
     return(<>
         <TitleBar title="Create New Collection Link" />
+        {showToast ? (
+          <Toast content={`Created Link`} onDismiss={() => {
+            setShowToast(false)
+            setShowErrorToast(false)
+          } } error={showErrorToast} />
+        ) : null}
         <ResourcePicker resourceType="Collection" open={resourcePickerOpen} onSelection={HandleResourcePicker} onCancel={() => history.push('/app')} />
         <div className={collectionData == false ? "app-page-title d-none" : "app-page-title"}>
             <div className="page-title-wrapper">
@@ -131,7 +145,7 @@ export default function CreateNewLink(props){
                 </div>    
             </div>
         </div>  
-        {collectionData == false ? "" : <Content collectionData={collectionData} formText={formText} handleText={handleText} />}
+        {collectionData == false ? "" : <Content collectionData={collectionData} formText={formText} handleText={handleText} domainUrl={domainUrl} slug={slug}/>}
 
         
         
@@ -139,8 +153,7 @@ export default function CreateNewLink(props){
 }
 
 function UrlPreview(props){
-    const domainUrl = `${props.collectionData.collectionUrl}`.match(/^(?:\/\/|[^\/]+)*/)[0];
-    const slug = `${props.collectionData.collectionUrl}`.match(/[^\/]+$/)[0];
+    
 
     if(props.formText.discountCode == ''){
         return(<>
@@ -151,7 +164,7 @@ function UrlPreview(props){
     } else {
         return(<>
             <div className="position-relative form-group">
-            {`${domainUrl}/discount/${props.formText.discountCode}?redirect=%2Fcollections%2F${slug}${props.formText.campaignSource == '' ? '' : `&utm_source=${props.formText.campaignSource.replace(/ /g, '%20')}`}${props.formText.campaignMedium == '' ? '' : `&utm_medium=${props.formText.campaignMedium.replace(/ /g, '%20')}`}${props.formText.campaignName == '' ? '' : `&utm_campaign=${props.formText.campaignName.replace(/ /g, '%20')}`}${props.formText.campaignTerm == '' ? '' : `&utm_term=${props.formText.campaignTerm.replace(/ /g, '%20')}`}${props.formText.campaignContent == '' ? '' : `&utm_campaign=${props.formText.campaignContent.replace(/ /g, '%20')}`}`}
+            {`${props.domainUrl}/discount/${props.formText.discountCode}?redirect=%2Fcollections%2F${props.slug}${props.formText.campaignSource == '' ? '' : `&utm_source=${props.formText.campaignSource.replace(/ /g, '%20')}`}${props.formText.campaignMedium == '' ? '' : `&utm_medium=${props.formText.campaignMedium.replace(/ /g, '%20')}`}${props.formText.campaignName == '' ? '' : `&utm_campaign=${props.formText.campaignName.replace(/ /g, '%20')}`}${props.formText.campaignTerm == '' ? '' : `&utm_term=${props.formText.campaignTerm.replace(/ /g, '%20')}`}${props.formText.campaignContent == '' ? '' : `&utm_campaign=${props.formText.campaignContent.replace(/ /g, '%20')}`}`}
             </div>
         </>)
     }
@@ -214,7 +227,7 @@ function Content(props) {
                             </div>
                         </div>
                         <h5 className="card-title">Link Preview</h5>
-                        <UrlPreview collectionData={props.collectionData} formText={props.formText} />
+                        <UrlPreview collectionData={props.collectionData} formText={props.formText} domainUrl={props.domainUrl} slug={props.slug} />
                         
                     </div>
                 </div>

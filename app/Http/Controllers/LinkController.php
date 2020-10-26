@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Link;
+use App\Shortlink;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -50,13 +51,19 @@ class LinkController extends Controller
         $link->original_content_title = $request->original_content_title;
         $link->link_type = $request->link_type;
         $link->user_id = $request->user_id;
+        $link->link_url = $request->link_url;
 
         if($request->link_type != 'custom') {
             $link->original_content_id = $request->original_content_id;
             $link->link_img_url = $request->link_img_url;
-        } 
-        
+        }
         $link->save();
+        $shortlink = new Shortlink;
+        $shortlink->user_id = $request->user_id;
+        $shortlink->link_id = $link->id;
+        $shortlink->slug = uniqid();
+        $shortlink->save();
+
         return "Saved Data";
     }
 
@@ -103,6 +110,7 @@ class LinkController extends Controller
         $link->original_content_title = $request->original_content_title;
         $link->link_type = $request->link_type;
         $link->user_id = $request->user_id;
+        $link->link_url = $request->link_url;
 
         if($request->link_type != 'custom') {
             $link->original_content_id = $request->original_content_id;

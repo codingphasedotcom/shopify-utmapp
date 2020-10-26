@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TitleBar, useRoutePropagation, ResourcePicker} from '@shopify/app-bridge-react';
+import {TitleBar, useRoutePropagation, ResourcePicker, Toast} from '@shopify/app-bridge-react';
 import {useLocation, useHistory} from 'react-router-dom';
 import axios from 'axios';
 
@@ -10,6 +10,8 @@ export default function CreateNewLink(props){
     const history = useHistory();
 
     const [resourcePickerOpen, setResourcePickerOpen] = useState(true);
+    const [showToast, setShowToast] = useState(false);
+    const [showErrorToast, setShowErrorToast] = useState(false);
     const [productData, setProductData] = useState(false);
     const [formText, setFormText] = useState({
         discountCode: '',
@@ -19,6 +21,9 @@ export default function CreateNewLink(props){
         campaignTerm: '',
         campaignContent: ''
     });
+
+    const domainUrl = `${productData.productUrl}`.match(/^(?:\/\/|[^\/]+)*/)[0];
+    const slug = `${productData.productUrl}`.match(/[^\/]+$/)[0];
 
     function HandleResourcePicker(resource){
         // console.log(resource.selection[0])
@@ -77,21 +82,30 @@ export default function CreateNewLink(props){
             original_content_id: productData.id,
             link_type: 'product',
             link_img_url: productData.images[0].originalSrc,
-            user_id: document.getElementById("userId").value
+            user_id: document.getElementById("userId").value,
+            link_url: `${domainUrl}/discount/${formText.discountCode}?redirect=%2Fproducts%2F${slug}${formText.campaignSource == '' ? '' : `&utm_source=${formText.campaignSource.replace(/ /g, '%20')}`}${formText.campaignMedium == '' ? '' : `&utm_medium=${formText.campaignMedium.replace(/ /g, '%20')}`}${formText.campaignName == '' ? '' : `&utm_campaign=${formText.campaignName.replace(/ /g, '%20')}`}${formText.campaignTerm == '' ? '' : `&utm_term=${formText.campaignTerm.replace(/ /g, '%20')}`}${formText.campaignContent == '' ? '' : `&utm_campaign=${formText.campaignContent.replace(/ /g, '%20')}`}`
           })
           .then(function (response) {
               if(response.data == "Saved Data"){
-                  alert('Link Saved')
+                    setShowToast(true);
                   history.push('/app/links/all')
               }
             console.log(response);
           })
           .catch(function (error) {
+            setShowErrorToast(true);
+            setShowToast(true);
             console.log(error);
           });
     }
     return(<>
         <TitleBar title="Create New Product Link" />
+        {showToast ? (
+          <Toast content={`Created Link`} onDismiss={() => {
+            setShowToast(false)
+            setShowErrorToast(false)
+          } } error={showErrorToast} />
+        ) : null}
         <ResourcePicker resourceType="Product" open={resourcePickerOpen} onSelection={HandleResourcePicker} onCancel={() => history.push('/app')} />
         <div className={productData == false ? "app-page-title d-none" : "app-page-title"}>
             <div className="page-title-wrapper">
@@ -120,15 +134,14 @@ export default function CreateNewLink(props){
                 </div>    
             </div>
         </div>  
-        {productData == false ? "" : <Content productData={productData} formText={formText} handleText={handleText} />}
+        {productData == false ? "" : <Content productData={productData} formText={formText} handleText={handleText} slug={slug} domainUrl={domainUrl} />}
 
         
         
     </>)
 }
 function UrlPreview(props){
-    const domainUrl = `${props.productData.productUrl}`.match(/^(?:\/\/|[^\/]+)*/)[0];
-    const slug = `${props.productData.productUrl}`.match(/[^\/]+$/)[0];
+    
 
     if(props.formText.discountCode == ''){
         return(<>
@@ -139,7 +152,7 @@ function UrlPreview(props){
     } else {
         return(<>
             <div className="position-relative form-group">
-            {`${domainUrl}/discount/${props.formText.discountCode}?redirect=%2Fproducts%2F${slug}${props.formText.campaignSource == '' ? '' : `&utm_source=${props.formText.campaignSource.replace(/ /g, '%20')}`}${props.formText.campaignMedium == '' ? '' : `&utm_medium=${props.formText.campaignMedium.replace(/ /g, '%20')}`}${props.formText.campaignName == '' ? '' : `&utm_campaign=${props.formText.campaignName.replace(/ /g, '%20')}`}${props.formText.campaignTerm == '' ? '' : `&utm_term=${props.formText.campaignTerm.replace(/ /g, '%20')}`}${props.formText.campaignContent == '' ? '' : `&utm_campaign=${props.formText.campaignContent.replace(/ /g, '%20')}`}`}
+            {`${props.domainUrl}/discount/${props.formText.discountCode}?redirect=%2Fproducts%2F${props.slug}${props.formText.campaignSource == '' ? '' : `&utm_source=${props.formText.campaignSource.replace(/ /g, '%20')}`}${props.formText.campaignMedium == '' ? '' : `&utm_medium=${props.formText.campaignMedium.replace(/ /g, '%20')}`}${props.formText.campaignName == '' ? '' : `&utm_campaign=${props.formText.campaignName.replace(/ /g, '%20')}`}${props.formText.campaignTerm == '' ? '' : `&utm_term=${props.formText.campaignTerm.replace(/ /g, '%20')}`}${props.formText.campaignContent == '' ? '' : `&utm_campaign=${props.formText.campaignContent.replace(/ /g, '%20')}`}`}
             </div>
         </>)
     }
@@ -200,7 +213,7 @@ function Content(props) {
                             </div>
                         </div>
                         <h5 className="card-title">Link Preview</h5>
-                        <UrlPreview productData={props.productData} formText={props.formText} />
+                        <UrlPreview productData={props.productData} formText={props.formText} domainUrl={props.domainUrl} slug={props.slug}/>
                         
                     </div>
                 </div>
