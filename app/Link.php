@@ -14,4 +14,15 @@ class Link extends Model
     {
         return $this->hasOne('App\Models\Shortlink');
     }
+    public function clicks()
+    {
+        return $this->hasManyThrough(
+            'App\Models\Click',
+            'App\Models\Shortlink',
+            'link_id', // Foreign key on shortlinks table...
+            'shortlink_id', // Foreign key on clicks table...
+            'id', // Local key on links table...
+            'id' // Local key on shortlinks table...
+        );
+    }
 }

@@ -111,6 +111,12 @@ export default function EditCollectionLink(props){
         console.log(formText)
     }
     function clickedSaveBtn(){
+        let link_url = '';
+        if(formText.discountCode == ''){
+            link_url = `${formText.collectionUrl}?${formText.campaignSource == '' ? '' : `utm_source=${formText.campaignSource.replace(/ /g, '%20')}`}${formText.campaignMedium == '' ? '' : `&utm_medium=${formText.campaignMedium.replace(/ /g, '%20')}`}${formText.campaignName == '' ? '' : `&utm_campaign=${formText.campaignName.replace(/ /g, '%20')}`}${formText.campaignTerm == '' ? '' : `&utm_term=${formText.campaignTerm.replace(/ /g, '%20')}`}${formText.campaignContent == '' ? '' : `&utm_campaign=${formText.campaignContent.replace(/ /g, '%20')}`}`
+        } else {
+            link_url = `${domainUrl}/discount/${formText.discountCode}?redirect=%2Fcollections%2F${slug}${formText.campaignSource == '' ? '' : `&utm_source=${formText.campaignSource.replace(/ /g, '%20')}`}${formText.campaignMedium == '' ? '' : `&utm_medium=${formText.campaignMedium.replace(/ /g, '%20')}`}${formText.campaignName == '' ? '' : `&utm_campaign=${formText.campaignName.replace(/ /g, '%20')}`}${formText.campaignTerm == '' ? '' : `&utm_term=${formText.campaignTerm.replace(/ /g, '%20')}`}${formText.campaignContent == '' ? '' : `&utm_campaign=${formText.campaignContent.replace(/ /g, '%20')}`}`
+        }
         axios.put(`/api/links/${link_id}`, {
             campaign_source: formText.campaignSource,
             campaign_medium: formText.campaignMedium,
@@ -124,7 +130,7 @@ export default function EditCollectionLink(props){
             link_type: 'collection',
             link_img_url: formText.linkImgUrl,
             user_id: document.getElementById("userId").value,
-            link_url: `${domainUrl}/discount/${formText.discountCode}?redirect=%2Fcollections%2F${slug}${formText.campaignSource == '' ? '' : `&utm_source=${formText.campaignSource.replace(/ /g, '%20')}`}${formText.campaignMedium == '' ? '' : `&utm_medium=${formText.campaignMedium.replace(/ /g, '%20')}`}${formText.campaignName == '' ? '' : `&utm_campaign=${formText.campaignName.replace(/ /g, '%20')}`}${formText.campaignTerm == '' ? '' : `&utm_term=${formText.campaignTerm.replace(/ /g, '%20')}`}${formText.campaignContent == '' ? '' : `&utm_campaign=${formText.campaignContent.replace(/ /g, '%20')}`}`
+            link_url: link_url
           })
           .then(function (response) {
               if(response.data == "Updated Data"){
