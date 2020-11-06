@@ -15,7 +15,11 @@ class CreateClicksTable extends Migration
     {
         Schema::create('clicks', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('shortlink_id')->unsigned();
             $table->timestamps();
+        });
+        Schema::table('clicks', function (Blueprint $table) {
+            $table->foreign('shortlink_id')->references('id')->on('shortlinks')->onDelete('cascade');
         });
     }
 
