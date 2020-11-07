@@ -11,6 +11,6 @@ class ShortlinkSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $shortlinks = factory(App\Shortlink::class, 20)->create();
     }
 }
