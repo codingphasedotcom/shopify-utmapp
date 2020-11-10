@@ -16,7 +16,7 @@ class ClickSeeder extends Seeder
         $faker = \Faker\Factory::create();
 
         foreach ($shortlinks as $shortlink) {
-            for($i = 0; $i <= 500; $i++){
+            for($i = 0; $i <= 50; $i++){
                 $click = new App\Click;
                 $click->shortlink_id = $shortlink->id;
                 $click->created_at = $faker->dateTimeBetween('-7 Days', '+1 week');
