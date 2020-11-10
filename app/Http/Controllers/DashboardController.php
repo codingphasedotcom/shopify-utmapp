@@ -18,12 +18,12 @@ class DashboardController extends Controller
         $totalClicks = DB::table('clicks as c')
         ->select(DB::raw('COUNT(c.id) as TotalClicks'))
         ->join('shortlinks', 'c.shortlink_id', '=', 'shortlinks.id')
-        ->whereRaw('c.created_at >= DATE(NOW()) + INTERVAL -6 DAY AND c.created_at <  NOW() + INTERVAL  0 DAY and shortlinks.user_id = ?', [$userID])
+        ->whereRaw('c.created_at >= current_date() + INTERVAL -6 DAY AND c.created_at <  current_date() + INTERVAL 1 DAY and shortlinks.user_id = ?', [$userID])
         ->get();
 
         $totalLinks = DB::table('links')
         ->select(DB::raw('COUNT(*) as TotalLinks'))
-        ->whereRaw('created_at >= DATE(NOW()) + INTERVAL -6 DAY AND created_at <  NOW() + INTERVAL  0 DAY and user_id = ?', [$userID])
+        ->whereRaw('created_at >= current_date() + INTERVAL -6 DAY AND created_at <  current_date() + INTERVAL  1 DAY and user_id = ?', [$userID])
         ->get();
 
 
@@ -31,14 +31,14 @@ class DashboardController extends Controller
         $clicksData = DB::table('clicks as c')
         ->select(DB::raw("DATE_FORMAT(c.created_at, '%m/%d') AS date, count(c.id) as total, 'click' as 'type'"))
         ->join('shortlinks as s', 'c.shortlink_id', '=', 's.id')
-        ->whereRaw('c.created_at >= DATE(NOW()) + INTERVAL -6 DAY AND c.created_at <  NOW() + INTERVAL  0 DAY and s.user_id = ?', [$userID])
+        ->whereRaw('c.created_at >= current_date() + INTERVAL -6 DAY AND c.created_at <  current_date() + INTERVAL 1 DAY and s.user_id = ?', [$userID])
         ->groupBy('date')
         ->orderBy('date', 'asc')
         ->get();
 
         $linksData = DB::table('links as l')
         ->select(DB::raw("DATE_FORMAT(l.created_at, '%m/%d') AS date, count(l.id) as total, 'link' as 'type'"))
-        ->whereRaw('created_at >= DATE(NOW()) + INTERVAL -6 DAY AND created_at <  NOW() + INTERVAL  0 DAY and user_id = ?', [$userID])
+        ->whereRaw('created_at >= current_date() + INTERVAL -6 DAY AND created_at <  current_date() + INTERVAL  1 DAY and user_id = ?', [$userID])
         ->groupBy('date')
         ->orderBy('date', 'asc')
         ->get();
