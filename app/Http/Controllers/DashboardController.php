@@ -13,12 +13,7 @@ class DashboardController extends Controller
         return view('home');
     }
     public function dashboardAPI(){
-        // SELECT COUNT(c.id) FROM utmapp.clicks as c  
-        // INNER JOIN     
-        // utmapp.shortlinks AS s     
-        // ON c.shortlink_id = s.id  
-        // WHERE c.created_at BETWEEN NOW() - INTERVAL 6 DAY AND NOW() 
-        // AND s.user_id = 3 
+        
         $userID = Auth::id();
         $totalClicks = DB::table('clicks as c')
         ->select(DB::raw('COUNT(c.id) as TotalClicks'))
@@ -30,10 +25,40 @@ class DashboardController extends Controller
         ->select(DB::raw('COUNT(*) as TotalLinks'))
         ->whereRaw('created_at >= DATE(NOW()) + INTERVAL -6 DAY AND created_at <  NOW() + INTERVAL  0 DAY and user_id = ?', [$userID])
         ->get();
+
+
+
+        $clicksData = DB::table('clicks as c')
+        ->select(DB::raw("DATE_FORMAT(c.created_at, '%m/%d') AS date, count(c.id) as total, 'click' as 'type'"))
+        ->join('shortlinks as s', 'c.shortlink_id', '=', 's.id')
+        ->whereRaw('c.created_at >= DATE(NOW()) + INTERVAL -6 DAY AND c.created_at <  NOW() + INTERVAL  0 DAY and s.user_id = ?', [$userID])
+        ->groupBy('date')
+        ->orderBy('date', 'asc')
+        ->get();
+
+        $linksData = DB::table('links as l')
+        ->select(DB::raw("DATE_FORMAT(l.created_at, '%m/%d') AS date, count(l.id) as total, 'link' as 'type'"))
+        ->whereRaw('created_at >= DATE(NOW()) + INTERVAL -6 DAY AND created_at <  NOW() + INTERVAL  0 DAY and user_id = ?', [$userID])
+        ->groupBy('date')
+        ->orderBy('date', 'asc')
+        ->get();
+        $chartData = [];
+
+        foreach($linksData as $v){
+            array_push($chartData, $v);
+        }
+        foreach($clicksData as $v){
+            array_push($chartData, $v);
+        }
+
+        
+
         return response()->json([ 
             "totalClicks" => $totalClicks[0]->TotalClicks,
             "totalLinks" => $totalLinks[0]->TotalLinks,
-            "WeeklyClicks" => [23,45,53,234,453,645,54]
+            "chartData" => $chartData,
+            "linksData" => $linksData,
+            "clicksData" => $clicksData
         ]);
     }
     public function graphql(Request $request){

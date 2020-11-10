@@ -24,45 +24,12 @@ export default function Home(props){
 
   useRoutePropagation(location);
 
-const data = [
-	{
-		date: "11/3",
-		type: "Links",
-		total: 2
-	},
-	{
-		date: "11/3",
-		type: "Clicks",
-		total: 235
-  },
-  {
-		date: "11/4",
-		type: "Links",
-		total: 10
-	},
-	{
-		date: "11/4",
-		type: "Clicks",
-		total: 367
-  },
-  {
-		date: "11/5",
-		type: "Links",
-		total: 6
-	},
-	{
-		date: "11/5",
-		type: "Clicks",
-		total: 132
-	},
-	
-];
 
 
     return(
         <>
           <TitleBar title="Home" />
-              { loadingData ? '<h1>Loading</h1>': <Dashboard dashboardData={dashboardData} data={data} />}
+              { loadingData ? '<h1>Loading</h1>': <Dashboard dashboardData={dashboardData} />}
         </>
     )
 }
@@ -162,17 +129,14 @@ function Dashboard(props){
                 
               </div>
               <div className="row">
-                <div className="col-md-12 col-lg-12">
+                
+                <div className="col-md-12 col-lg-6">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header-tab-animation card-header">
                       <div className="card-header-title">
                         <i className="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        Sales Report
+                        Clicks Report
                       </div>
-                      <ul className="nav">
-                        <li className="nav-item"><a href="#;" className="active nav-link">Last</a></li>
-                        <li className="nav-item"><a href="#;" className="nav-link second-tab-toggle">Current</a></li>
-                      </ul>
                     </div>
                     <div className="card-body">
                       <div className="tab-content">
@@ -181,7 +145,7 @@ function Dashboard(props){
                             <div className="widget-chat-wrapper-outer">
                               <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
                                 {/* Show Chart Here */}
-                                <Chart padding={[10, 20, 50, 40]} autoFit height={300} data={props.data} >
+                                <Chart padding={[10, 20, 50, 40]} autoFit height={400} data={props.dashboardData.clicksData} >
                                   <LineAdvance
                                     shape="smooth"
                                     point
@@ -193,128 +157,48 @@ function Dashboard(props){
                               </div>
                             </div>
                           </div>
-                          <h6 className="text-muted text-uppercase font-size-md opacity-5 font-weight-normal">Top Authors</h6>
-                          <div className="scroll-area-sm">
-                            <div className="scrollbar-container">
-                              <ul className="rm-list-borders rm-list-borders-scroll list-group list-group-flush">
-                                <li className="list-group-item">
-                                  <div className="widget-content p-0">
-                                    <div className="widget-content-wrapper">
-                                      <div className="widget-content-left mr-3">
-                                        <img width={42} className="rounded-circle" src="assets/images/avatars/9.jpg" alt="" />
-                                      </div>
-                                      <div className="widget-content-left">
-                                        <div className="widget-heading">Ella-Rose Henry</div>
-                                        <div className="widget-subheading">Web Developer</div>
-                                      </div>
-                                      <div className="widget-content-right">
-                                        <div className="font-size-xlg text-muted">
-                                          <small className="opacity-5 pr-1">$</small>
-                                          <span>129</span>
-                                          <small className="text-danger pl-2">
-                                            <i className="fa fa-angle-down" />
-                                          </small>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </li>
-                                <li className="list-group-item">
-                                  <div className="widget-content p-0">
-                                    <div className="widget-content-wrapper">
-                                      <div className="widget-content-left mr-3">
-                                        <img width={42} className="rounded-circle" src="assets/images/avatars/5.jpg" alt="" />
-                                      </div>
-                                      <div className="widget-content-left">
-                                        <div className="widget-heading">Ruben Tillman</div>
-                                        <div className="widget-subheading">UI Designer</div>
-                                      </div>
-                                      <div className="widget-content-right">
-                                        <div className="font-size-xlg text-muted">
-                                          <small className="opacity-5 pr-1">$</small>
-                                          <span>54</span>
-                                          <small className="text-success pl-2">
-                                            <i className="fa fa-angle-up" />
-                                          </small>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </li>
-                                <li className="list-group-item">
-                                  <div className="widget-content p-0">
-                                    <div className="widget-content-wrapper">
-                                      <div className="widget-content-left mr-3">
-                                        <img width={42} className="rounded-circle" src="assets/images/avatars/4.jpg" alt="" />
-                                      </div>
-                                      <div className="widget-content-left">
-                                        <div className="widget-heading">Vinnie Wagstaff</div>
-                                        <div className="widget-subheading">Java Programmer</div>
-                                      </div>
-                                      <div className="widget-content-right">
-                                        <div className="font-size-xlg text-muted">
-                                          <small className="opacity-5 pr-1">$</small>
-                                          <span>429</span>
-                                          <small className="text-warning pl-2">
-                                            <i className="fa fa-dot-circle" />
-                                          </small>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </li>
-                                <li className="list-group-item">
-                                  <div className="widget-content p-0">
-                                    <div className="widget-content-wrapper">
-                                      <div className="widget-content-left mr-3">
-                                        <img width={42} className="rounded-circle" src="assets/images/avatars/3.jpg" alt="" />
-                                      </div>
-                                      <div className="widget-content-left">
-                                        <div className="widget-heading">Ella-Rose Henry</div>
-                                        <div className="widget-subheading">Web Developer</div>
-                                      </div>
-                                      <div className="widget-content-right">
-                                        <div className="font-size-xlg text-muted">
-                                          <small className="opacity-5 pr-1">$</small>
-                                          <span>129</span>
-                                          <small className="text-danger pl-2">
-                                            <i className="fa fa-angle-down" />
-                                          </small>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </li>
-                                <li className="list-group-item">
-                                  <div className="widget-content p-0">
-                                    <div className="widget-content-wrapper">
-                                      <div className="widget-content-left mr-3">
-                                        <img width={42} className="rounded-circle" src="assets/images/avatars/2.jpg" alt="" />
-                                      </div>
-                                      <div className="widget-content-left">
-                                        <div className="widget-heading">Ruben Tillman</div>
-                                        <div className="widget-subheading">UI Designer</div>
-                                      </div>
-                                      <div className="widget-content-right">
-                                        <div className="font-size-xlg text-muted">
-                                          <small className="opacity-5 pr-1">$</small>
-                                          <span>54</span>
-                                          <small className="text-success pl-2">
-                                            <i className="fa fa-angle-up" />
-                                          </small>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
+                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                <div className="col-md-12 col-lg-6">
+                  <div className="mb-3 card">
+                    <div className="card-header-tab card-header-tab-animation card-header">
+                      <div className="card-header-title">
+                        <i className="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                        Links Report
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      <div className="tab-content">
+                        <div className="tab-pane fade show active" id="tabs-eg-77">
+                          <div className="card mb-3 widget-chart widget-chart2 text-left w-100">
+                            <div className="widget-chat-wrapper-outer">
+                              <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
+                                {/* Show Chart Here */}
+                                <Chart padding={[10, 20, 50, 40]} autoFit height={400} data={props.dashboardData.linksData} >
+                                  <LineAdvance
+                                    shape="smooth"
+                                    point
+                                    area
+                                    position="date*total"
+                                    
+                                    color={['type', '#ff0000-#000000']}
+                                  />
+                                </Chart>
+                              </div>
+                            </div>
+                          </div>
+                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                
+                
+                
                 <div className="col-md-12 col-lg-6">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header">
