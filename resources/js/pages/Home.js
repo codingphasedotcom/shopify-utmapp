@@ -1,16 +1,38 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {TitleBar, useRoutePropagation} from '@shopify/app-bridge-react';
 import {useLocation} from 'react-router-dom';
+import axios from 'axios';
 
 export default function Home(props){
   let location = useLocation();
   console.log(location)
+  const [loadingData, setLoadingData] = useState(true);
+  const [dashboardData, setDashboardData] = useState(false);
+  useEffect(() => {
+    axios.get(`/api/dashboard`)
+    .then(function (response) {
+        setLoadingData(false)
+        setDashboardData(response.data)
+        console.log(response)
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+}, []);
+
 
   useRoutePropagation(location);
     return(
         <>
           <TitleBar title="Home" />
-              <div className="app-page-title">
+              { loadingData ? '<h1>Loading</h1>': <Dashboard dashboardData={dashboardData}/>}
+        </>
+    )
+}
+
+function Dashboard(props){
+  return(<> 
+  <div className="app-page-title">
                 <div className="page-title-wrapper">
                   <div className="page-title-heading">
                     <div className="page-title-icon">
@@ -78,11 +100,11 @@ export default function Home(props){
                   <div className="card mb-3 widget-content bg-midnight-bloom">
                     <div className="widget-content-wrapper text-white">
                       <div className="widget-content-left">
-                        <div className="widget-heading">Total Orders</div>
-                        <div className="widget-subheading">Last year expenses</div>
+                        <div className="widget-heading">Total Clicks</div>
+                        <div className="widget-subheading">This Year</div>
                       </div>
                       <div className="widget-content-right">
-                        <div className="widget-numbers text-white"><span>1896</span></div>
+                        <div className="widget-numbers text-white"><span>{props.dashboardData.totalClicks}</span></div>
                       </div>
                     </div>
                   </div>
@@ -674,7 +696,5 @@ export default function Home(props){
                   </div>
                 </div>
               </div>
-            
-        </>
-    )
+  </>)
 }

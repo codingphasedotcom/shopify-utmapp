@@ -18,9 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/app', function () {
-    return view('home');
-})->middleware(['auth.shopify'])->name('home');
+Route::get('/app', 'DashboardController@index')->middleware(['auth.shopify'])->name('home');
 
 Route::get('/{slug}', 'ShortlinkController@index');
 

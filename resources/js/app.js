@@ -4,7 +4,6 @@ import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import {AppProvider, Card, Page} from '@shopify/polaris';
 import {Provider, TitleBar} from '@shopify/app-bridge-react';
-import Dashboard from './pages/Dashboard';
 import MainLayout from './layouts/MainLayout';
 import Home from './pages/Home';
 import {

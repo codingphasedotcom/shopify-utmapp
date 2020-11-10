@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+// Dashboard API
+Route::middleware('auth.shopify')->get('/dashboard', 'DashboardController@dashboardAPI');
+// Links API
 Route::middleware('auth.shopify')->post('/createlink', 'LinkController@store');
 Route::middleware('auth.shopify')->get('/links', 'LinkController@index');
 Route::middleware('auth.shopify')->get('/links/{id}', 'LinkController@edit');
