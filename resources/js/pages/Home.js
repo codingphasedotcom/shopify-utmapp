@@ -39,7 +39,7 @@ function Dashboard(props){
                       <i className="pe-7s-car icon-gradient bg-mean-fruit">
                       </i>
                     </div>
-                    <div>Analytics Dashboard
+                    <div>Last 7 Days Report
                       <div className="page-title-subheading">This is an example dashboard created using build-in elements and components.
                       </div>
                     </div>
@@ -96,12 +96,12 @@ function Dashboard(props){
                     </div>
                   </div>  </div>
               </div>            <div className="row">
-                <div className="col-md-6 col-xl-4">
+                <div className="col-md-6 col-xl-6">
                   <div className="card mb-3 widget-content bg-midnight-bloom">
                     <div className="widget-content-wrapper text-white">
                       <div className="widget-content-left">
-                        <div className="widget-heading">Total Clicks</div>
-                        <div className="widget-subheading">This Year</div>
+                        <div className="widget-heading">Clicks</div>
+                        <div className="widget-subheading">Last 7 Days</div>
                       </div>
                       <div className="widget-content-right">
                         <div className="widget-numbers text-white"><span>{props.dashboardData.totalClicks}</span></div>
@@ -109,45 +109,20 @@ function Dashboard(props){
                     </div>
                   </div>
                 </div>
-                <div className="col-md-6 col-xl-4">
+                <div className="col-md-6 col-xl-6">
                   <div className="card mb-3 widget-content bg-arielle-smile">
                     <div className="widget-content-wrapper text-white">
                       <div className="widget-content-left">
-                        <div className="widget-heading">Clients</div>
-                        <div className="widget-subheading">Total Clients Profit</div>
+                        <div className="widget-heading">Links</div>
+                        <div className="widget-subheading">Last 7 Days</div>
                       </div>
                       <div className="widget-content-right">
-                        <div className="widget-numbers text-white"><span>$ 568</span></div>
+                        <div className="widget-numbers text-white"><span>{props.dashboardData.totalLinks}</span></div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="col-md-6 col-xl-4">
-                  <div className="card mb-3 widget-content bg-grow-early">
-                    <div className="widget-content-wrapper text-white">
-                      <div className="widget-content-left">
-                        <div className="widget-heading">Followers</div>
-                        <div className="widget-subheading">People Interested</div>
-                      </div>
-                      <div className="widget-content-right">
-                        <div className="widget-numbers text-white"><span>46%</span></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="d-xl-none d-lg-block col-md-6 col-xl-4">
-                  <div className="card mb-3 widget-content bg-premium-dark">
-                    <div className="widget-content-wrapper text-white">
-                      <div className="widget-content-left">
-                        <div className="widget-heading">Products Sold</div>
-                        <div className="widget-subheading">Revenue streams</div>
-                      </div>
-                      <div className="widget-content-right">
-                        <div className="widget-numbers text-warning"><span>$14M</span></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
               <div className="row">
                 <div className="col-md-12 col-lg-6">
