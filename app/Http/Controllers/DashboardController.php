@@ -13,14 +13,22 @@ class DashboardController extends Controller
         return view('home');
     }
     public function dashboardAPI(){
-        // SELECT COUNT(*) FROM utmapp.clicks;
-        $totalClicks = DB::table('clicks')
-        ->select(DB::raw('COUNT(*) as TotalClicks'))
-        ->whereRaw('created_at BETWEEN NOW() - INTERVAL 6 DAY AND NOW()')
+        // SELECT COUNT(c.id) FROM utmapp.clicks as c  
+        // INNER JOIN     
+        // utmapp.shortlinks AS s     
+        // ON c.shortlink_id = s.id  
+        // WHERE c.created_at BETWEEN NOW() - INTERVAL 6 DAY AND NOW() 
+        // AND s.user_id = 3 
+        $userID = Auth::id();
+        $totalClicks = DB::table('clicks as c')
+        ->select(DB::raw('COUNT(c.id) as TotalClicks'))
+        ->join('shortlinks', 'c.shortlink_id', '=', 'shortlinks.id')
+        ->whereRaw('c.created_at >= DATE(NOW()) + INTERVAL -6 DAY AND c.created_at <  NOW() + INTERVAL  0 DAY and shortlinks.user_id = ?', [$userID])
         ->get();
+
         $totalLinks = DB::table('links')
         ->select(DB::raw('COUNT(*) as TotalLinks'))
-        ->whereRaw('created_at BETWEEN NOW() - INTERVAL 6 DAY AND NOW()')
+        ->whereRaw('created_at >= DATE(NOW()) + INTERVAL -6 DAY AND created_at <  NOW() + INTERVAL  0 DAY and user_id = ?', [$userID])
         ->get();
         return response()->json([ 
             "totalClicks" => $totalClicks[0]->TotalClicks,
