@@ -23,6 +23,7 @@
     "dependencies": {
         "@shopify/app-bridge-react": "^1.27.2",
         "@shopify/polaris": "^5.3.1",
+        "bizcharts": "^4.0.14",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-router-dom": "^5.2.0"

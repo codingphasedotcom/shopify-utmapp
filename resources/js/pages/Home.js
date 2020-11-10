@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {TitleBar, useRoutePropagation} from '@shopify/app-bridge-react';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
+import { Chart, LineAdvance } from 'bizcharts';
 
 export default function Home(props){
   let location = useLocation();
@@ -22,10 +23,46 @@ export default function Home(props){
 
 
   useRoutePropagation(location);
+
+const data = [
+	{
+		date: "11/3",
+		type: "Links",
+		total: 2
+	},
+	{
+		date: "11/3",
+		type: "Clicks",
+		total: 235
+  },
+  {
+		date: "11/4",
+		type: "Links",
+		total: 10
+	},
+	{
+		date: "11/4",
+		type: "Clicks",
+		total: 367
+  },
+  {
+		date: "11/5",
+		type: "Links",
+		total: 6
+	},
+	{
+		date: "11/5",
+		type: "Clicks",
+		total: 132
+	},
+	
+];
+
+
     return(
         <>
           <TitleBar title="Home" />
-              { loadingData ? '<h1>Loading</h1>': <Dashboard dashboardData={dashboardData}/>}
+              { loadingData ? '<h1>Loading</h1>': <Dashboard dashboardData={dashboardData} data={data} />}
         </>
     )
 }
@@ -125,7 +162,7 @@ function Dashboard(props){
                 
               </div>
               <div className="row">
-                <div className="col-md-12 col-lg-6">
+                <div className="col-md-12 col-lg-12">
                   <div className="mb-3 card">
                     <div className="card-header-tab card-header-tab-animation card-header">
                       <div className="card-header-title">
@@ -143,7 +180,16 @@ function Dashboard(props){
                           <div className="card mb-3 widget-chart widget-chart2 text-left w-100">
                             <div className="widget-chat-wrapper-outer">
                               <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
-                                <canvas id="canvas" />
+                                {/* Show Chart Here */}
+                                <Chart padding={[10, 20, 50, 40]} autoFit height={300} data={props.data} >
+                                  <LineAdvance
+                                    shape="smooth"
+                                    point
+                                    area
+                                    position="date*total"
+                                    color="type"
+                                  />
+                                </Chart>
                               </div>
                             </div>
                           </div>
