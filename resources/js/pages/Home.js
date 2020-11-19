@@ -145,7 +145,7 @@ function Dashboard(props){
                             <div className="widget-chat-wrapper-outer">
                               <div className="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
                                 {/* Show Chart Here */}
-                                <Chart padding={[10, 20, 50, 40]} autoFit height={400} data={props.dashboardData.clicksData} >
+                                <Chart padding={[5, 5, 5, 5]} autoFit height={400} data={props.dashboardData.clicksData} >
                                   <LineAdvance
                                     shape="smooth"
                                     point
