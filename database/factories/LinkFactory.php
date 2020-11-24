@@ -9,7 +9,7 @@ $factory->define(Link::class, function (Faker $faker) {
     return [
         'original_content_title' => $faker->realText(40),
         'link_url' => 'https://codingphaseapp.myshopify.com/discount/50JULY4?redirect=%2Fproducts%2Fadidas-classic-backpack-legend-ink-multicolour&utm_source=youtube&utm_medium=video&utm_campaign=50July4&utm_term=ad&utm_campaign=banner8',
-        'campaign_source' => $faker->word,
+        'campaign_source' => $faker->randomElement(array ('facebook','instagram','pinterest','twitter','tiktok','youtube')),
         'campaign_medium' => $faker->word, 
         'campaign_name' => $faker->word,
         'campaign_term' => $faker->word,

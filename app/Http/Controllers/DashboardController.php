@@ -51,6 +51,27 @@ class DashboardController extends Controller
             array_push($chartData, $v);
         }
 
+        // SELECT count(c.id), l.campaign_source as source FROM utmapp.clicks as c  
+        // INNER JOIN     
+        // utmapp.shortlinks AS s     
+        // ON c.shortlink_id = s.id
+        // Inner Join
+        // utmapp.links as l
+        // on s.link_id = l.id
+        // WHERE c.created_at >= DATE(NOW()) + INTERVAL -6 DAY AND c.created_at <  NOW() + INTERVAL  0 DAY
+        // AND s.user_id = 1 
+        // group by l.campaign_source;
+
+        $sourceTotal = DB::table('clicks as c')
+        ->select(DB::raw("count(c.id) as total, l.campaign_source"))
+        ->join('shortlinks as s', 'c.shortlink_id', '=', 's.id')
+        ->join('links as l', 's.link_id', '=', 'l.id')
+        ->whereRaw('c.created_at >= current_date() + INTERVAL -6 DAY AND c.created_at <  current_date() + INTERVAL 1 DAY and s.user_id = ?', [$userID])
+        ->groupBy('l.campaign_source')
+        ->orderBy('l.campaign_source', 'asc')
+        ->get();
+        
+
         
 
         return response()->json([ 
@@ -58,7 +79,8 @@ class DashboardController extends Controller
             "totalLinks" => $totalLinks[0]->TotalLinks,
             "chartData" => $chartData,
             "linksData" => $linksData,
-            "clicksData" => $clicksData
+            "clicksData" => $clicksData, 
+            "sourceTotal" => $sourceTotal
         ]);
     }
     public function graphql(Request $request){
