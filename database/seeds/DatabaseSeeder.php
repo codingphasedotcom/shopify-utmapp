@@ -13,5 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(ShortlinkSeeder::class);
         $this->call(ClickSeeder::class);
+        $this->call(PlanSeeder::class);
     }
 }
