@@ -9,10 +9,14 @@ use DB;
 class DashboardController extends Controller
 {
     public function index(){
+        $user = Auth::user();
+        // return $user->plan;
         
         return view('home');
+
     }
     public function dashboardAPI(){
+        $user = Auth::user();
         
         $userID = Auth::id();
         $totalClicks = DB::table('clicks as c')
@@ -80,7 +84,8 @@ class DashboardController extends Controller
             "chartData" => $chartData,
             "linksData" => $linksData,
             "clicksData" => $clicksData, 
-            "sourceTotal" => $sourceTotal
+            "sourceTotal" => $sourceTotal,
+            "userPlan" => $user->plan
         ]);
     }
     public function graphql(Request $request){
