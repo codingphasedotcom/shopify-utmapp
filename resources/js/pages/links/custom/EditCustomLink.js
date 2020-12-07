@@ -189,7 +189,7 @@ function Content(props) {
                             <input onChange={(event) => props.handleText('campaignContent', event.target.value)} name="campaignContent" id="campaignContent" placeholder="Girl With Laptop Image Ad, Image3, Banner 5" type="text" className="form-control" value={props.formText.campaignContent} />
                         </div>
                         
-                        <button className="mt-1 btn btn-primary">Submit</button>
+                        
                         </form>
                     </div>
                 </div>

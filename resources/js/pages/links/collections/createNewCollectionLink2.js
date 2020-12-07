@@ -493,9 +493,7 @@ function Content(props) {
                                     />
                                 </div>
 
-                                <button className="mt-1 btn btn-primary">
-                                    Submit
-                                </button>
+                                
                             </form>
                         </div>
                     </div>
