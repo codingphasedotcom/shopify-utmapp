@@ -5,8 +5,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('shopify-app.app_name') }}</title>
-        <link rel="stylesheet" href="{{asset('template/main.css')}}">
-        <link rel="stylesheet" href="{{asset('css/app.css')}}">
+        <link rel="stylesheet" href="{{secure_asset('template/main.css')}}">
+        <link rel="stylesheet" href="{{secure_asset('css/app.css')}}">
         @yield('styles')
     </head>
 
@@ -38,7 +38,7 @@
         <input type="hidden" id="apiKey" value="{{ config('shopify-app.api_key') }}">
         <input type="hidden" id="shopOrigin" value="{{ Auth::user()->name }}">
         <input type="hidden" id="userId" value="{{ Auth::user()->id }}">
-        <script src="{{asset('js/app.js')}}"></script>
+        <script src="{{secure_asset('js/app.js')}}"></script>
         @yield('scripts')
     </body>
 </html>
